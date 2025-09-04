@@ -36,7 +36,6 @@ public enum CryptoBoringWrapperError: Error {
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension CryptoBoringWrapperError {
     /// A helper function that packs the value of `ERR_get_error` into the internal error field.
-    @usableFromInline
     package static func internalBoringSSLError() -> CryptoBoringWrapperError {
         .underlyingCoreCryptoError(error: Int32(bitPattern: CCryptoBoringSSL_ERR_get_error()))
     }

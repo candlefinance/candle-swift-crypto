@@ -59,7 +59,6 @@ extension BoringSSLAEAD {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 enum OpenSSLAESGCMSIVImpl {
-    @inlinable
     static func seal<Plaintext: DataProtocol, AuthenticatedData: DataProtocol>(
         key: SymmetricKey,
         message: Plaintext,
@@ -90,8 +89,6 @@ enum OpenSSLAESGCMSIVImpl {
 
         return try AES.GCM._SIV.SealedBox(nonce: nonce, ciphertext: ciphertext, tag: tag)
     }
-
-    @inlinable
     static func open<AuthenticatedData: DataProtocol>(
         key: SymmetricKey,
         sealedBox: AES.GCM._SIV.SealedBox,
@@ -115,8 +112,6 @@ enum OpenSSLAESGCMSIVImpl {
             )
         }
     }
-
-    @usableFromInline
     static func _backingAEAD(key: SymmetricKey) throws -> BoringSSLAEAD {
         switch key.bitCount {
         case 128:

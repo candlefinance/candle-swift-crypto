@@ -15,11 +15,8 @@
 @_implementationOnly import CCryptoBoringSSL
 import Crypto
 import Foundation
-
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 enum OpenSSLAESCTRImpl {
-    @inlinable
     static func encrypt<Plaintext: ContiguousBytes>(
         _ plaintext: Plaintext,
         using key: SymmetricKey,
@@ -32,8 +29,6 @@ enum OpenSSLAESCTRImpl {
             Self._encrypt(plaintextBufferPtr, using: key, nonce: nonce)
         }
     }
-
-    @usableFromInline
     static func _encrypt(
         _ plaintextBufferPtr: UnsafeRawBufferPointer,
         using key: SymmetricKey,

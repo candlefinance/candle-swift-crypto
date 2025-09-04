@@ -21,10 +21,7 @@ import Foundation
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension Curve25519.Signing.PublicKey {
     // We do this to enable inlinability on these methods.
-    @usableFromInline
     static let signatureByteCount = Curve25519.Signing.signatureByteCount
-
-    @inlinable
     func openSSLIsValidSignature<S: DataProtocol, D: DataProtocol>(
         _ signature: S,
         for data: D
@@ -63,8 +60,6 @@ extension Curve25519.Signing.PublicKey {
             )
         }
     }
-
-    @inlinable
     func openSSLIsValidSignature<S: ContiguousBytes, D: ContiguousBytes>(
         contiguousSignature signature: S,
         contiguousData data: D
@@ -77,7 +72,6 @@ extension Curve25519.Signing.PublicKey {
     }
 
     // We need this factored out because self.keyBytes is not @usableFromInline, and so we can't see it.
-    @usableFromInline
     func openSSLIsValidSignature(
         signaturePointer: UnsafeRawBufferPointer,
         dataPointer: UnsafeRawBufferPointer
@@ -99,7 +93,6 @@ extension Curve25519.Signing.PublicKey {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension Curve25519.Signing.PrivateKey {
-    @inlinable
     func openSSLSignature<D: DataProtocol>(for data: D) throws -> Data {
         if data.regions.count == 1 {
             return try self.openSSLSignature(forContiguousData: data.regions.first!)
@@ -107,15 +100,11 @@ extension Curve25519.Signing.PrivateKey {
             return try self.openSSLSignature(forContiguousData: Array(data))
         }
     }
-
-    @inlinable
     func openSSLSignature<C: ContiguousBytes>(forContiguousData data: C) throws -> Data {
         try data.withUnsafeBytes {
             try self.openSSLSignature(forDataPointer: $0)
         }
     }
-
-    @usableFromInline
     func openSSLSignature(forDataPointer dataPointer: UnsafeRawBufferPointer) throws -> Data {
         var signature = Data(repeating: 0, count: Curve25519.Signing.PublicKey.signatureByteCount)
 

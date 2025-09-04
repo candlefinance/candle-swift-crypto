@@ -34,8 +34,6 @@ class ECDSASignature {
             return sig
         }
     }
-
-    @usableFromInline
     init(rawRepresentation: Data) throws {
         let half = rawRepresentation.count / 2
         let r = try ArbitraryPrecisionInteger(bytes: rawRepresentation.prefix(half))
@@ -78,8 +76,6 @@ class ECDSASignature {
     deinit {
         CCryptoBoringSSL_ECDSA_SIG_free(self._baseSig)
     }
-
-    @usableFromInline
     var components: (r: ArbitraryPrecisionInteger, s: ArbitraryPrecisionInteger) {
         var rPtr: UnsafePointer<BIGNUM>?
         var sPtr: UnsafePointer<BIGNUM>?
@@ -91,8 +87,6 @@ class ECDSASignature {
             s: try! ArbitraryPrecisionInteger(copying: sPtr!)
         )
     }
-
-    @usableFromInline
     var derBytes: Data {
         var dataPtr: UnsafeMutablePointer<UInt8>?
         var length = 0

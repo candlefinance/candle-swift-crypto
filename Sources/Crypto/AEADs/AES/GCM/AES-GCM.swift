@@ -148,8 +148,6 @@ extension AES.GCM {
                 return nil
             }
         }
-        
-        @usableFromInline
         internal init(combined: Data) {
             self.combinedRepresentation = combined
             self.nonceByteCount = AES.GCM.defaultNonceByteCount
@@ -166,7 +164,6 @@ extension AES.GCM {
         /// - Parameters:
         ///   - combined: The combined bytes of the nonce, encrypted data, and
         /// authentication tag.
-        @inlinable
         public init<D: DataProtocol>(combined: D) throws {
             // AES minimum nonce (12 bytes) + AES tag (16 bytes)
             // While we have these values in the internal APIs, we can't use it in inlinable code.

@@ -19,16 +19,13 @@
 import CryptoBoringWrapper
 import Foundation
 
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 protocol OpenSSLSupportedNISTCurve {
-    @inlinable
     static var group: BoringSSLEllipticCurveGroup { get }
 }
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension OpenSSLSupportedNISTCurve {
-    @inlinable
     static var coordinateByteCount: Int {
         self.group.coordinateByteCount
     }
@@ -36,7 +33,6 @@ extension OpenSSLSupportedNISTCurve {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension P256: OpenSSLSupportedNISTCurve {
-    @inlinable
     static var group: BoringSSLEllipticCurveGroup {
         try! BoringSSLEllipticCurveGroup(.p256)
     }
@@ -44,7 +40,6 @@ extension P256: OpenSSLSupportedNISTCurve {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension P384: OpenSSLSupportedNISTCurve {
-    @inlinable
     static var group: BoringSSLEllipticCurveGroup {
         try! BoringSSLEllipticCurveGroup(.p384)
     }
@@ -52,16 +47,13 @@ extension P384: OpenSSLSupportedNISTCurve {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension P521: OpenSSLSupportedNISTCurve {
-    @inlinable
     static var group: BoringSSLEllipticCurveGroup {
         try! BoringSSLEllipticCurveGroup(.p521)
     }
 }
 
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 struct OpenSSLNISTCurvePrivateKeyImpl<Curve: OpenSSLSupportedNISTCurve> {
-    @usableFromInline
     var key: BoringSSLECPrivateKeyWrapper<Curve>
 
     init(compactRepresentable: Bool = true) {
@@ -89,10 +81,8 @@ struct OpenSSLNISTCurvePrivateKeyImpl<Curve: OpenSSLSupportedNISTCurve> {
     }
 }
 
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 struct OpenSSLNISTCurvePublicKeyImpl<Curve: OpenSSLSupportedNISTCurve> {
-    @usableFromInline
     var key: BoringSSLECPublicKeyWrapper<Curve>
 
     init<Bytes: ContiguousBytes>(compactRepresentation: Bytes) throws {
@@ -111,27 +101,22 @@ struct OpenSSLNISTCurvePublicKeyImpl<Curve: OpenSSLSupportedNISTCurve> {
         self.key = try BoringSSLECPublicKeyWrapper(compressedRepresentation: compressedRepresentation)
     }
 
-    @inlinable
     init(wrapping key: BoringSSLECPublicKeyWrapper<Curve>) {
         self.key = key
     }
 
-    @inlinable
     var compactRepresentation: Data? {
         self.key.compactRepresentation
     }
 
-    @inlinable
     var rawRepresentation: Data {
         self.key.rawRepresentation
     }
 
-    @inlinable
     var x963Representation: Data {
         self.key.x963Representation
     }
 
-    @inlinable
     var compressedRepresentation: Data {
         self.key.compressedRepresentation
     }
@@ -139,10 +124,8 @@ struct OpenSSLNISTCurvePublicKeyImpl<Curve: OpenSSLSupportedNISTCurve> {
 
 /// A simple wrapper for an EC_KEY pointer for a private key. This manages the lifetime of that pointer and
 /// allows some helper operations.
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 class BoringSSLECPrivateKeyWrapper<Curve: OpenSSLSupportedNISTCurve> {
-    @usableFromInline
     var key: OpaquePointer
 
     init(compactRepresentable: Bool) throws {
@@ -255,7 +238,6 @@ class BoringSSLECPrivateKeyWrapper<Curve: OpenSSLSupportedNISTCurve> {
         try! BoringSSLECPublicKeyWrapper(unsafeTakingOwnership: CCryptoBoringSSL_EC_KEY_dup(self.key))
     }
 
-    @usableFromInline
     var publicKeyPoint: EllipticCurvePoint {
         try! EllipticCurvePoint(
             copying: CCryptoBoringSSL_EC_KEY_get0_public_key(self.key)!,
@@ -263,12 +245,10 @@ class BoringSSLECPrivateKeyWrapper<Curve: OpenSSLSupportedNISTCurve> {
         )
     }
 
-    @usableFromInline
     var privateKeyScalar: ArbitraryPrecisionInteger {
         try! ArbitraryPrecisionInteger(copying: CCryptoBoringSSL_EC_KEY_get0_private_key(self.key)!)
     }
 
-    @inlinable
     var rawRepresentation: Data {
         // The raw representation is just the bytes that make up k. This try! should only fire if we have internal
         // consistency errors.
@@ -281,7 +261,6 @@ class BoringSSLECPrivateKeyWrapper<Curve: OpenSSLSupportedNISTCurve> {
         return bytes
     }
 
-    @inlinable
     var x963Representation: Data {
         // The x9.63 private key format is a discriminator byte (0x4) concatenated with the X and Y points
         // of the public key, and the K value of the secret scalar. Let's load that in.
@@ -344,10 +323,8 @@ class BoringSSLECPrivateKeyWrapper<Curve: OpenSSLSupportedNISTCurve> {
 
 /// A simple wrapper for an EC_KEY pointer for a public key. This manages the lifetime of that pointer and
 /// allows some helper operations.
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 class BoringSSLECPublicKeyWrapper<Curve: OpenSSLSupportedNISTCurve> {
-    @usableFromInline
     var key: OpaquePointer
 
     init<Bytes: ContiguousBytes>(compactRepresentation bytes: Bytes) throws {
@@ -441,7 +418,6 @@ class BoringSSLECPublicKeyWrapper<Curve: OpenSSLSupportedNISTCurve> {
     }
 
     /// Takes ownership of the pointer. If this throws, ownership of the pointer has not been taken.
-    @usableFromInline
     init(unsafeTakingOwnership ownedPointer: OpaquePointer) throws {
         guard let newKeyGroup = CCryptoBoringSSL_EC_KEY_get0_group(ownedPointer) else {
             throw CryptoKitError.internalBoringSSLError()
@@ -456,7 +432,6 @@ class BoringSSLECPublicKeyWrapper<Curve: OpenSSLSupportedNISTCurve> {
         self.key = ownedPointer
     }
 
-    @inlinable
     var compactRepresentation: Data? {
         let group = Curve.group
         guard _isCompactRepresentable(group: group, publicKeyPoint: self.publicKeyPoint) else {
@@ -473,14 +448,12 @@ class BoringSSLECPublicKeyWrapper<Curve: OpenSSLSupportedNISTCurve> {
         return bytes
     }
 
-    @inlinable
     var rawRepresentation: Data {
         // The raw representation is the X coordinate concatenated with the Y coordinate: essentially, it's
         // the x963 representation without the leading byte.
         self.x963Representation.dropFirst()
     }
 
-    @inlinable
     var x963Representation: Data {
         // The x963 representation is the X coordinate concatenated with the Y coordinate, prefixed by the byte 0x04.
         let group = Curve.group
@@ -498,7 +471,6 @@ class BoringSSLECPublicKeyWrapper<Curve: OpenSSLSupportedNISTCurve> {
         return bytes
     }
 
-    @inlinable
     var compressedRepresentation: Data {
         // The x963 representation is the X coordinate, prefixed by the byte 0x02 or 0x03 depending on whether the Y coordinate is odd or even.
         // We calculate this by playing games with the x963Representation. We can safely assume that this Data is zero-indexed, because
@@ -513,7 +485,6 @@ class BoringSSLECPublicKeyWrapper<Curve: OpenSSLSupportedNISTCurve> {
         CCryptoBoringSSL_EC_KEY_free(self.key)
     }
 
-    @usableFromInline
     var publicKeyPoint: EllipticCurvePoint {
         try! EllipticCurvePoint(
             copying: CCryptoBoringSSL_EC_KEY_get0_public_key(self.key)!,
@@ -609,7 +580,6 @@ extension ContiguousBytes {
         }
     }
 
-    @inlinable
     func readx963PublicNumbers() throws -> (
         x: ArbitraryPrecisionInteger, y: ArbitraryPrecisionInteger
     ) {
@@ -626,7 +596,6 @@ extension ContiguousBytes {
         }
     }
 
-    @inlinable
     func readx963CompressedPublicNumbers() throws -> (x: ArbitraryPrecisionInteger, yBit: Bool) {
         // The x9.63 compressed public key format is a discriminator byte (0x2 or 0x3) that signals which
         // of the possible two Y values is being used, concatenated with the X point of the key.
@@ -650,7 +619,6 @@ extension ContiguousBytes {
     }
 }
 
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 func readRawPublicNumbers(
     copyingBytes bytesPtr: UnsafeRawBufferPointer
@@ -680,7 +648,6 @@ func readRawPublicNumbers(
 ///
 /// The check is defined in https://tools.ietf.org/id/draft-jivsov-ecc-compact-05.html#rfc.section.4.2.1. Specifically, a
 /// point is compact representable if its y coordinate is the smaller of min(y, p-y) where p is the order of the prime field.
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 func _isCompactRepresentable(
     group: BoringSSLEllipticCurveGroup,

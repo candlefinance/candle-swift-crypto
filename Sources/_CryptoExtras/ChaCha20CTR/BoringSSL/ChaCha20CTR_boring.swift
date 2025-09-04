@@ -51,7 +51,6 @@ enum OpenSSLChaCha20CTRImpl {
     }
 
     /// A fast-path for encrypting contiguous data. Also inlinable to gain specialization information.
-    @inlinable
     static func _encryptContiguous<Plaintext: ContiguousBytes, Nonce: ContiguousBytes>(
         key: SymmetricKey,
         message: Plaintext,

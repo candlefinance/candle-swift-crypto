@@ -28,13 +28,11 @@ import Foundation
 ///
 /// Annoyingly, because of the way we have implemented ArbitraryPrecisionInteger, we can't actually use these temporary bignums
 /// ourselves.
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 package class FiniteFieldArithmeticContext {
     private var fieldSize: ArbitraryPrecisionInteger
     private var bnCtx: OpaquePointer
 
-    @usableFromInline
     package init(fieldSize: ArbitraryPrecisionInteger) throws {
         self.fieldSize = fieldSize
         guard let bnCtx = CCryptoBoringSSL_BN_CTX_new() else {
@@ -54,7 +52,6 @@ package class FiniteFieldArithmeticContext {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension FiniteFieldArithmeticContext {
-    @usableFromInline
     package func residue(_ x: ArbitraryPrecisionInteger) throws -> ArbitraryPrecisionInteger {
         var result = ArbitraryPrecisionInteger()
 
@@ -73,7 +70,6 @@ extension FiniteFieldArithmeticContext {
         return result
     }
 
-    @usableFromInline
     package func square(_ input: ArbitraryPrecisionInteger) throws -> ArbitraryPrecisionInteger {
         var output = ArbitraryPrecisionInteger()
 
@@ -92,7 +88,6 @@ extension FiniteFieldArithmeticContext {
         return output
     }
 
-    @usableFromInline
     package func multiply(
         _ x: ArbitraryPrecisionInteger,
         _ y: ArbitraryPrecisionInteger
@@ -124,7 +119,6 @@ extension FiniteFieldArithmeticContext {
         return output
     }
 
-    @usableFromInline
     package func add(
         _ x: ArbitraryPrecisionInteger,
         _ y: ArbitraryPrecisionInteger
@@ -156,7 +150,6 @@ extension FiniteFieldArithmeticContext {
         return output
     }
 
-    @usableFromInline
     package func subtract(
         _ x: ArbitraryPrecisionInteger,
         from y: ArbitraryPrecisionInteger
@@ -189,7 +182,6 @@ extension FiniteFieldArithmeticContext {
         return output
     }
 
-    @usableFromInline
     package func positiveSquareRoot(
         _ x: ArbitraryPrecisionInteger
     ) throws
@@ -214,7 +206,6 @@ extension FiniteFieldArithmeticContext {
         return try ArbitraryPrecisionInteger(copying: actualOutputPointer)
     }
 
-    @usableFromInline
     package func inverse(_ x: ArbitraryPrecisionInteger) throws -> ArbitraryPrecisionInteger? {
         var result = ArbitraryPrecisionInteger()
 
@@ -231,7 +222,6 @@ extension FiniteFieldArithmeticContext {
         return result
     }
 
-    @usableFromInline
     package func pow(
         _ x: ArbitraryPrecisionInteger,
         _ p: ArbitraryPrecisionInteger
@@ -241,7 +231,6 @@ extension FiniteFieldArithmeticContext {
         try self.pow(x, p) { r, x, p, m, ctx, _ in CCryptoBoringSSL_BN_mod_exp(r, x, p, m, ctx) }
     }
 
-    @usableFromInline
     package func pow(
         secret x: ArbitraryPrecisionInteger,
         _ p: ArbitraryPrecisionInteger
@@ -252,7 +241,6 @@ extension FiniteFieldArithmeticContext {
         return try self.pow(x, p, using: CCryptoBoringSSL_BN_mod_exp_mont)
     }
 
-    @usableFromInline
     package func pow(
         secret x: ArbitraryPrecisionInteger,
         secret p: ArbitraryPrecisionInteger

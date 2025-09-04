@@ -15,16 +15,11 @@
 @_implementationOnly import CCryptoBoringSSL
 import Crypto
 import Foundation
-
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 enum OpenSSLAESCFBImpl {
-    @usableFromInline
     enum Mode {
         case encrypt
         case decrypt
-
-        @usableFromInline
         var _boringSSLParameter: Int32 {
             switch self {
             case .encrypt: return AES_ENCRYPT
@@ -32,8 +27,6 @@ enum OpenSSLAESCFBImpl {
             }
         }
     }
-
-    @inlinable
     static func encryptOrDecrypt<Plaintext: ContiguousBytes>(
         _ mode: Mode,
         _ plaintext: Plaintext,
@@ -47,8 +40,6 @@ enum OpenSSLAESCFBImpl {
             Self._encryptOrDecrypt(mode, plaintextBufferPtr, using: key, iv: iv)
         }
     }
-
-    @usableFromInline
     static func _encryptOrDecrypt(
         _ mode: Mode,
         _ plaintextBufferPtr: UnsafeRawBufferPointer,

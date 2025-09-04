@@ -21,13 +21,11 @@ import Foundation
 // For signing and verifying, we use BoringSSL's Ed25519, not the X25519 stuff.
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension Curve25519.Signing {
-    @usableFromInline
     @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
     struct OpenSSLCurve25519PrivateKeyImpl {
         var _privateKey: SecureBytes
-        @usableFromInline var _publicKey: [UInt8]
+        var _publicKey: [UInt8]
 
-        @usableFromInline
         init() {
             // BoringSSL's Ed25519 implementation stores the private key concatenated with the public key, so we do
             // as well. We also store the public key because it makes our lives easier.
@@ -48,7 +46,6 @@ extension Curve25519.Signing {
             self._publicKey = publicKey
         }
 
-        @usableFromInline
         var publicKey: Curve25519.Signing.OpenSSLCurve25519PublicKeyImpl {
             OpenSSLCurve25519PublicKeyImpl(self._publicKey)
         }
@@ -86,20 +83,16 @@ extension Curve25519.Signing {
             self._publicKey = publicKey
         }
 
-        @usableFromInline
         var rawRepresentation: Data {
             // The "rawRepresentation" is what BoringSSL calls the "seed", and it's the first 32 bytes of our key.
             Data(self._privateKey.prefix(32))
         }
     }
 
-    @usableFromInline
     @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
     struct OpenSSLCurve25519PublicKeyImpl {
-        @usableFromInline
         var keyBytes: [UInt8]
 
-        @inlinable
         init<D: ContiguousBytes>(rawRepresentation: D) throws {
             self.keyBytes = try rawRepresentation.withUnsafeBytes { keyBytesPtr in
                 guard keyBytesPtr.count == 32 else {

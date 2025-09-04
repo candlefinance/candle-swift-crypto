@@ -15,12 +15,10 @@
 
 /// A wrapper around BoringSSL's EC_GROUP object that handles reference counting and
 /// liveness.
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 package final class BoringSSLEllipticCurveGroup {
-    @usableFromInline var _group: OpaquePointer
+    var _group: OpaquePointer
 
-    @usableFromInline
     package init(_ curve: CurveName) throws {
         guard let group = CCryptoBoringSSL_EC_GROUP_new_by_curve_name(curve.baseNID) else {
             throw CryptoBoringWrapperError.internalBoringSSLError()
@@ -38,12 +36,10 @@ package final class BoringSSLEllipticCurveGroup {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension BoringSSLEllipticCurveGroup {
-    @usableFromInline
     package var coordinateByteCount: Int {
         (Int(CCryptoBoringSSL_EC_GROUP_get_degree(self._group)) + 7) / 8
     }
 
-    @usableFromInline
     package func makeUnsafeOwnedECKey() throws -> OpaquePointer {
         guard let key = CCryptoBoringSSL_EC_KEY_new(),
             CCryptoBoringSSL_EC_KEY_set_group(key, self._group) == 1
@@ -54,7 +50,6 @@ extension BoringSSLEllipticCurveGroup {
         return key
     }
 
-    @usableFromInline
     package func makeUnsafeOwnedECPoint() throws -> OpaquePointer {
         guard let point = CCryptoBoringSSL_EC_POINT_new(self._group) else {
             throw CryptoBoringWrapperError.internalBoringSSLError()
@@ -63,19 +58,16 @@ extension BoringSSLEllipticCurveGroup {
         return point
     }
 
-    @inlinable
     package func withUnsafeGroupPointer<T>(_ body: (OpaquePointer) throws -> T) rethrows -> T {
         try body(self._group)
     }
 
-    @usableFromInline
     package var order: ArbitraryPrecisionInteger {
         // Groups must have an order.
         let baseOrder = CCryptoBoringSSL_EC_GROUP_get0_order(self._group)!
         return try! ArbitraryPrecisionInteger(copying: baseOrder)
     }
 
-    @usableFromInline
     package var generator: EllipticCurvePoint {
         get throws {
             guard let generatorPtr = CCryptoBoringSSL_EC_GROUP_get0_generator(self._group) else {
@@ -87,7 +79,6 @@ extension BoringSSLEllipticCurveGroup {
 
     /// An elliptic curve can be represented in a Weierstrass form: `y² = x³ + ax + b`. This
     /// property provides the values of a and b on the curve.
-    @usableFromInline
     package var weierstrassCoefficients:
         (field: ArbitraryPrecisionInteger, a: ArbitraryPrecisionInteger, b: ArbitraryPrecisionInteger)
     {
@@ -112,7 +103,6 @@ extension BoringSSLEllipticCurveGroup {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension BoringSSLEllipticCurveGroup {
-    @usableFromInline
     @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
     package enum CurveName {
         case p256
@@ -120,7 +110,6 @@ extension BoringSSLEllipticCurveGroup {
         case p521
     }
 
-    @usableFromInline
     var curveName: CurveName? {
         switch CCryptoBoringSSL_EC_GROUP_get_curve_name(self._group) {
         case NID_X9_62_prime256v1:
@@ -137,7 +126,6 @@ extension BoringSSLEllipticCurveGroup {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension BoringSSLEllipticCurveGroup.CurveName {
-    @usableFromInline
     var baseNID: CInt {
         switch self {
         case .p256:

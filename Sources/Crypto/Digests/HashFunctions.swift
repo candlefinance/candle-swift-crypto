@@ -104,7 +104,6 @@ extension HashFunction {
     /// - Parameters:
     ///   - bufferPointer: The buffer to be hashed.
     /// - Returns: The computed digest.
-    @inlinable
     static func hash(bufferPointer: UnsafeRawBufferPointer) -> Digest {
         var hasher = Self()
         hasher.update(bufferPointer: bufferPointer)
@@ -128,7 +127,6 @@ extension HashFunction {
     /// instances.
     ///
     /// - Returns: The computed digest of the data.
-    @inlinable
     public static func hash<D: DataProtocol>(data: D) -> Self.Digest {
         var hasher = Self()
         hasher.update(data: data)
@@ -149,7 +147,6 @@ extension HashFunction {
     /// like <doc://com.apple.documentation/documentation/foundation/data> or an
     /// array of <doc://com.apple.documentation/documentation/swift/uint8>
     /// instances.
-    @inlinable
     public mutating func update<D: DataProtocol>(data: D) {
         data.regions.forEach { (regionData) in
             regionData.withUnsafeBytes({ (dataPtr) in

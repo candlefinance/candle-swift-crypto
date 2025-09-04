@@ -14,8 +14,6 @@
 
 import Crypto
 import Foundation
-
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 typealias AESCTRImpl = OpenSSLAESCTRImpl
 
@@ -24,7 +22,6 @@ extension AES {
 
     @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
     public enum _CTR {
-        @inlinable
         public static func encrypt<Plaintext: DataProtocol>(
             _ plaintext: Plaintext,
             using key: SymmetricKey,
@@ -33,8 +30,6 @@ extension AES {
             let bytes: ContiguousBytes = plaintext.regions.count == 1 ? plaintext.regions.first! : Array(plaintext)
             return try AESCTRImpl.encrypt(bytes, using: key, nonce: nonce)
         }
-
-        @inlinable
         public static func decrypt<Ciphertext: DataProtocol>(
             _ ciphertext: Ciphertext,
             using key: SymmetricKey,

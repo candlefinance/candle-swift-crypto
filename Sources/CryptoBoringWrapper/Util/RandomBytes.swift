@@ -14,7 +14,6 @@
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension UnsafeMutableRawBufferPointer {
-    @inlinable
     package func initializeWithRandomBytes(count: Int) {
         guard count > 0 else {
             return
@@ -47,7 +46,6 @@ extension UnsafeMutableRawBufferPointer {
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension SystemRandomNumberGenerator {
-    @inlinable
     package static func randomBytes(count: Int) -> [UInt8] {
         Array(unsafeUninitializedCapacity: count) { buffer, initializedCount in
             UnsafeMutableRawBufferPointer(start: buffer.baseAddress, count: buffer.count)

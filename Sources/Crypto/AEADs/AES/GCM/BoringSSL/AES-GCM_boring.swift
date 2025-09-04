@@ -20,7 +20,6 @@ import Foundation
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 enum OpenSSLAESGCMImpl {
-    @inlinable
     static func seal<Plaintext: DataProtocol, AuthenticatedData: DataProtocol>(
         key: SymmetricKey,
         message: Plaintext,
@@ -51,8 +50,6 @@ enum OpenSSLAESGCMImpl {
 
         return try AES.GCM.SealedBox(nonce: nonce, ciphertext: ciphertext, tag: tag)
     }
-
-    @inlinable
     static func open<AuthenticatedData: DataProtocol>(
         key: SymmetricKey,
         sealedBox: AES.GCM.SealedBox,
@@ -78,8 +75,6 @@ enum OpenSSLAESGCMImpl {
             )
         }
     }
-
-    @usableFromInline
     static func _backingAEAD(key: SymmetricKey) throws -> BoringSSLAEAD {
         switch key.bitCount {
         case 128:

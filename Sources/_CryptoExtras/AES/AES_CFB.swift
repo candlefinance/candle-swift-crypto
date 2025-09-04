@@ -14,8 +14,6 @@
 
 import Crypto
 import Foundation
-
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 typealias AESCFBImpl = OpenSSLAESCFBImpl
 
@@ -23,7 +21,6 @@ typealias AESCFBImpl = OpenSSLAESCFBImpl
 extension AES {
     @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
     public enum _CFB {
-        @inlinable
         public static func encrypt<Plaintext: DataProtocol>(
             _ plaintext: Plaintext,
             using key: SymmetricKey,
@@ -32,8 +29,6 @@ extension AES {
             let bytes: ContiguousBytes = plaintext.regions.count == 1 ? plaintext.regions.first! : Array(plaintext)
             return try AESCFBImpl.encryptOrDecrypt(.encrypt, bytes, using: key, iv: iv)
         }
-
-        @inlinable
         public static func decrypt<Ciphertext: DataProtocol>(
             _ ciphertext: Ciphertext,
             using key: SymmetricKey,

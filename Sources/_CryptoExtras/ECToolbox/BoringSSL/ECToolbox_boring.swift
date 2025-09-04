@@ -18,92 +18,68 @@ import Foundation
 /// NOTE: This protocol is different from `Crypto.OpenSSLSupportedNISTCurve` module and has additional requirements to
 /// support ECToolbox. It is (re-)defined here because its counterpart in the Crypto module is only conditionally
 /// compiled on _non-Darwin_ platforms, but we implement ECToolbox on both Darwin and non-Darwin platforms.
-@usableFromInline
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 protocol OpenSSLSupportedNISTCurve {
     associatedtype H: HashFunction
 
-    @inlinable
     static var group: BoringSSLEllipticCurveGroup { get }
 
     // TODO: we could use EC_GROUP_get_cofactor for this and drop this requirement.
-    @inlinable
     static var cofactor: Int { get }
 
-    @inlinable
     static var orderByteCount: Int { get }
 
-    @inlinable
     static var compressedx962PointByteCount: Int { get }
 
     // TODO: could this be moved to the group or to the HashFunction?
-    @inlinable
     static var hashToFieldByteCount: Int { get }
 }
 
 /// NOTE: This conformance applies to this type from the Crypto module even if it comes from the SDK.
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension P256: OpenSSLSupportedNISTCurve {
-    @usableFromInline
     typealias H = SHA256
 
-    @inlinable
     static var group: BoringSSLEllipticCurveGroup { try! BoringSSLEllipticCurveGroup(.p256) }
 
-    @inlinable
     static var cofactor: Int { 1 }
 
-    @inlinable
     static var orderByteCount: Int { 32 }
 
-    @inlinable
     static var compressedx962PointByteCount: Int { 33 }
 
-    @inlinable
     static var hashToFieldByteCount: Int { 48 }
 }
 
 /// NOTE: This conformance applies to this type from the Crypto module even if it comes from the SDK.
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension P384: OpenSSLSupportedNISTCurve {
-    @usableFromInline
     typealias H = SHA384
 
-    @inlinable
     static var group: BoringSSLEllipticCurveGroup { try! BoringSSLEllipticCurveGroup(.p384) }
 
-    @inlinable
     static var cofactor: Int { 1 }
 
-    @inlinable
     static var orderByteCount: Int { 48 }
 
-    @inlinable
     static var compressedx962PointByteCount: Int { 49 }
 
-    @inlinable
     static var hashToFieldByteCount: Int { 72 }
 }
 
 /// NOTE: This conformance applies to this type from the Crypto module even if it comes from the SDK.
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension P521: OpenSSLSupportedNISTCurve {
-    @usableFromInline
     typealias H = SHA512
 
-    @inlinable
     static var group: BoringSSLEllipticCurveGroup { try! BoringSSLEllipticCurveGroup(.p521) }
 
-    @inlinable
     static var cofactor: Int { 1 }
 
-    @inlinable
     static var orderByteCount: Int { 66 }
 
-    @inlinable
     static var compressedx962PointByteCount: Int { 67 }
 
-    @inlinable
     static var hashToFieldByteCount: Int { 98 }
 }
 

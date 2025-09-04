@@ -122,7 +122,6 @@ extension BoringSSLAEAD.AEADContext {
     }
 
     /// A fast-path for sealing contiguous data. Also inlinable to gain specialization information.
-    @inlinable
     func _sealContiguous<
         Plaintext: ContiguousBytes,
         Nonce: ContiguousBytes,
@@ -148,7 +147,6 @@ extension BoringSSLAEAD.AEADContext {
     }
 
     /// The unsafe base call: not inlinable so that it can touch private variables.
-    @usableFromInline
     func _sealContiguous(
         plaintext: UnsafeRawBufferPointer,
         noncePointer: UnsafeRawBufferPointer,
@@ -205,7 +203,6 @@ extension BoringSSLAEAD.AEADContext {
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension BoringSSLAEAD.AEADContext {
     /// The main entry point for opening data. Covers the full gamut of types, including discontiguous data types. This must be inlinable.
-    @inlinable
     public func open<Nonce: ContiguousBytes, AuthenticatedData: DataProtocol>(
         ciphertext: Data,
         nonce: Nonce,
@@ -238,7 +235,6 @@ extension BoringSSLAEAD.AEADContext {
     }
 
     /// A fast-path for opening contiguous data. Also inlinable to gain specialization information.
-    @inlinable
     func _openContiguous<Nonce: ContiguousBytes, AuthenticatedData: ContiguousBytes>(
         ciphertext: Data,
         nonce: Nonce,
@@ -262,7 +258,6 @@ extension BoringSSLAEAD.AEADContext {
     }
 
     /// The unsafe base call: not inlinable so that it can touch private variables.
-    @usableFromInline
     func _openContiguous(
         ciphertext: UnsafeRawBufferPointer,
         nonceBytes: UnsafeRawBufferPointer,
@@ -306,7 +301,6 @@ extension BoringSSLAEAD.AEADContext {
     }
 
     /// An additional entry point for opening data where the ciphertext and the tag can be provided as one combined data . Covers the full gamut of types, including discontiguous data types. This must be inlinable.
-    @inlinable
     public func open<Nonce: ContiguousBytes, AuthenticatedData: DataProtocol>(
         combinedCiphertextAndTag: Data,
         nonce: Nonce,
@@ -336,7 +330,6 @@ extension BoringSSLAEAD.AEADContext {
     }
 
     /// A fast-path for opening contiguous data. Also inlinable to gain specialization information.
-    @inlinable
     func _openContiguous<Nonce: ContiguousBytes, AuthenticatedData: ContiguousBytes>(
         combinedCiphertextAndTag: Data,
         nonce: Nonce,
@@ -356,7 +349,6 @@ extension BoringSSLAEAD.AEADContext {
     }
 
     /// The unsafe base call: not inlinable so that it can touch private variables.
-    @usableFromInline
     func _openContiguous(
         combinedCiphertextAndTag: UnsafeRawBufferPointer,
         nonceBytes: UnsafeRawBufferPointer,

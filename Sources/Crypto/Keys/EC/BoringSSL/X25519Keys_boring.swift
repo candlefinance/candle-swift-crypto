@@ -20,16 +20,10 @@ import Foundation
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension Curve25519.KeyAgreement {
-    @usableFromInline
     static let keySizeBytes = 32
-
-    @usableFromInline
     @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
     struct OpenSSLCurve25519PublicKeyImpl {
-        @usableFromInline
         var keyBytes: [UInt8]
-
-        @inlinable
         init<D: ContiguousBytes>(rawRepresentation: D) throws {
             self.keyBytes = try rawRepresentation.withUnsafeBytes { dataPtr in
                 guard dataPtr.count == Curve25519.KeyAgreement.keySizeBytes else {
@@ -39,24 +33,16 @@ extension Curve25519.KeyAgreement {
                 return Array(dataPtr)
             }
         }
-
-        @usableFromInline
         init(_ keyBytes: [UInt8]) {
             self.keyBytes = keyBytes
         }
-
-        @usableFromInline
         var rawRepresentation: Data {
             Data(self.keyBytes)
         }
     }
-
-    @usableFromInline
     @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
     struct OpenSSLCurve25519PrivateKeyImpl {
         var key: SecureBytes
-
-        @usableFromInline
         var publicKey: OpenSSLCurve25519PublicKeyImpl
 
         init() {
@@ -107,8 +93,6 @@ extension Curve25519.KeyAgreement {
             self.key = SecureBytes(bytes: rawRepresentation)
             self.publicKey = .init(publicBytes)
         }
-
-        @usableFromInline
         func sharedSecretFromKeyAgreement(
             with publicKeyShare: OpenSSLCurve25519PublicKeyImpl
         ) throws
@@ -143,8 +127,6 @@ extension Curve25519.KeyAgreement {
 
             return SharedSecret(ss: sharedSecret)
         }
-
-        @usableFromInline
         var rawRepresentation: Data {
             Data(self.key)
         }

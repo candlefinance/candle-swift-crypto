@@ -137,7 +137,6 @@ extension ChaChaPoly {
         ///
         /// - Parameters:
         ///   - combined: The combined bytes of the tag and ciphertext.
-        @inlinable
         public init<D: DataProtocol>(combined: D) throws {
             // ChachaPoly nonce (12 bytes) + ChachaPoly tag (16 bytes)
             // While we have these values in the internal APIs, we can't use it in inlinable code.
