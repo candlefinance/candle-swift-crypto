@@ -152,7 +152,7 @@ let package = Package(
                 "CandleCCryptoBoringSSLShims",
                 "CandleCryptoBoringWrapper",
                 "CandleCrypto",
-                .product(name: "SwiftASN1", package: "swift-asn1"),
+                .product(name: "SwiftASN1", package: "candle-swift-asn1"),
             ],
             exclude: privacyManifestExclude + [
                 "CMakeLists.txt"
@@ -200,11 +200,11 @@ let package = Package(
 // Switch between local and remote dependencies depending on an environment variable
 if ProcessInfo.processInfo.environment["SWIFTCI_USE_LOCAL_DEPS"] == nil {
     package.dependencies += [
-        .package(url: "https://github.com/candlefinance/swift-asn1.git", branch: "fix-candle-1.3.2")
+        .package(url: "https://github.com/candlefinance/swift-asn1.git", name: "candle-swift-asn1", branch: "fix-candle-1.3.2")
     ]
 } else {
     package.dependencies += [
-        .package(path: "../swift-asn1")
+        .package(path: "../swift-asn1", name: "candle-swift-asn1")
     ]
 }
 
