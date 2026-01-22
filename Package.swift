@@ -84,7 +84,6 @@ let package = Package(
     name: "candle-swift-crypto",
     products: [
         .library(name: "CandleCrypto", targets: ["CandleCrypto"]),
-        .library(name: "_CryptoExtras", targets: ["_CryptoExtras"]),
         /* This target is used only for symbol mangling. It's added and removed automatically because it emits build warnings. MANGLE_START
             .library(name: "CandleCCryptoBoringSSL", type: .static, targets: ["CandleCCryptoBoringSSL"]),
             MANGLE_END */
@@ -146,21 +145,6 @@ let package = Package(
             swiftSettings: swiftSettings
         ),
         .target(
-            name: "_CryptoExtras",
-            dependencies: [
-                "CandleCCryptoBoringSSL",
-                "CandleCCryptoBoringSSLShims",
-                "CandleCryptoBoringWrapper",
-                "CandleCrypto",
-                .product(name: "SwiftASN1", package: "candle-swift-asn1"),
-            ],
-            exclude: privacyManifestExclude + [
-                "CMakeLists.txt"
-            ],
-            resources: privacyManifestResource,
-            swiftSettings: swiftSettings
-        ),
-        .target(
             name: "CandleCryptoBoringWrapper",
             dependencies: [
                 "CandleCCryptoBoringSSL",
@@ -177,18 +161,6 @@ let package = Package(
             dependencies: ["CandleCrypto"],
             resources: [
                 .copy("HPKE/hpke-test-vectors.json")
-            ],
-            swiftSettings: swiftSettings
-        ),
-        .testTarget(
-            name: "_CryptoExtrasTests",
-            dependencies: ["_CryptoExtras"],
-            resources: [
-                .copy("ECToolbox/H2CVectors/P256_XMD-SHA-256_SSWU_RO_.json"),
-                .copy("ECToolbox/H2CVectors/P384_XMD-SHA-384_SSWU_RO_.json"),
-                .copy("OPRFs/OPRFVectors/OPRFVectors-VOPRFDraft8.json"),
-                .copy("OPRFs/OPRFVectors/OPRFVectors-VOPRFDraft19.json"),
-                .copy("OPRFs/OPRFVectors/OPRFVectors-edgecases.json"),
             ],
             swiftSettings: swiftSettings
         ),
