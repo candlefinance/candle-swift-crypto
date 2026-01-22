@@ -81,7 +81,7 @@ let privacyManifestResource: [PackageDescription.Resource] = []
 #endif
 
 let package = Package(
-    name: "swift-crypto",
+    name: "candle-swift-crypto",
     products: [
         .library(name: "CandleCrypto", targets: ["CandleCrypto"]),
         .library(name: "_CryptoExtras", targets: ["_CryptoExtras"]),
