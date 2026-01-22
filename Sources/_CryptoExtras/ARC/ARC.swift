@@ -11,7 +11,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 //===----------------------------------------------------------------------===//
-import Crypto
+import CandleCrypto
 import Foundation
 
 /// Anonymous Rate-Limited Credentials (ARC) using the CMZ14 MACGGM construction, as defined in

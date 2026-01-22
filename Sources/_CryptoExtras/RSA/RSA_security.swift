@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 import Foundation
-import Crypto
+import CandleCrypto
 
 #if CRYPTO_IN_SWIFTPM && !CRYPTO_IN_SWIFTPM_FORCE_BUILD_API
 @_implementationOnly import Security
@@ -194,7 +194,7 @@ extension SecurityRSAPrivateKey {
         return _RSA.Signing.RSASignature(rawRepresentation: signature as Data)
     }
  }
- 
+
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
  extension SecurityRSAPrivateKey {
     internal func decrypt<D: DataProtocol>(_ data: D, padding: _RSA.Encryption.Padding) throws -> Data {
@@ -202,11 +202,11 @@ extension SecurityRSAPrivateKey {
         let dataToDecrypt = Data(data)
         var error: Unmanaged<CFError>? = nil
         let dec = SecKeyCreateDecryptedData(self.backing, algorithm, dataToDecrypt as CFData, &error)
-        
+
         guard let decrypted = dec else {
             throw error!.takeRetainedValue() as Error
         }
-        
+
         return decrypted as Data
     }
 }
@@ -238,11 +238,11 @@ extension SecurityRSAPublicKey {
         let dataToEncrypt = Data(data)
         var error: Unmanaged<CFError>? = nil
         let enc = SecKeyCreateEncryptedData(self.backing, algorithm, dataToEncrypt as CFData, &error)
-        
+
         guard let encrypted = enc else {
             throw error!.takeRetainedValue() as Error
         }
-        
+
         return encrypted as Data
     }
 }
@@ -274,7 +274,7 @@ extension SecKeyAlgorithm {
             throw CryptoKitError.incorrectParameterSize
         }
     }
-    
+
     fileprivate init(padding: _RSA.Encryption.Padding) throws {
         switch padding.backing {
         case .pkcs1_oaep(let digest):

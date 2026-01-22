@@ -11,8 +11,8 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 //===----------------------------------------------------------------------===//
-import Crypto
-import CryptoBoringWrapper
+import CandleCrypto
+import CandleCryptoBoringWrapper
 import Foundation
 
 /// NOTE: This protocol is different from `Crypto.OpenSSLSupportedNISTCurve` module and has additional requirements to

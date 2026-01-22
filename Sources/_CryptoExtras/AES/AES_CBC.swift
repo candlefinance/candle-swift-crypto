@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Crypto
+import CandleCrypto
 import Foundation
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
@@ -44,7 +44,7 @@ extension AES {
         public static func encrypt<Plaintext: DataProtocol>(_ plaintext: Plaintext, using key: SymmetricKey, iv: AES._CBC.IV) throws -> Data {
             try self.encrypt(plaintext, using: key, iv: iv, noPadding: false)
         }
-        
+
         /// Encrypts data using AES-CBC.
         ///
         /// - Parameters:
@@ -106,7 +106,7 @@ extension AES {
         public static func decrypt<Ciphertext: DataProtocol>(_ ciphertext: Ciphertext, using key: SymmetricKey, iv: AES._CBC.IV) throws -> Data {
             try self.decrypt(ciphertext, using: key, iv: iv, noPadding: false)
         }
-        
+
         /// Decrypts data using AES-CBC.
         ///
         /// - Parameters:

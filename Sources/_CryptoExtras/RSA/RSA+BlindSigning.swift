@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 import Foundation
-import Crypto
-import CryptoBoringWrapper
+import CandleCrypto
+import CandleCryptoBoringWrapper
 
 // NOTE: RSABSSA API is implemented using BoringSSL on all platforms.
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
@@ -257,7 +257,7 @@ extension _RSA.BlindSigning {
         /// The use of this API is strongly discouraged for performance reasons,
         /// as it requires the factorization of the modulus, which is resource-intensive.
         /// It is recommended to use the other initializers to construct a private key,
-        /// unless you have only the modulus, public exponent, and private exponent 
+        /// unless you have only the modulus, public exponent, and private exponent
         /// to construct the key.
         ///
         /// - Parameters:
@@ -267,14 +267,14 @@ extension _RSA.BlindSigning {
         ///   - parameters: parameters used in the blind signing protocol
         public static func _createFromNumbers(n: some ContiguousBytes, e: some ContiguousBytes, d: some ContiguousBytes, parameters: Parameters) throws -> Self {
             let (p, q) = try _RSA.extractPrimeFactors(
-                n: try ArbitraryPrecisionInteger(bytes: n), 
-                e: try ArbitraryPrecisionInteger(bytes: e), 
+                n: try ArbitraryPrecisionInteger(bytes: n),
+                e: try ArbitraryPrecisionInteger(bytes: e),
                 d: try ArbitraryPrecisionInteger(bytes: d)
             )
 
             return try Self.init(
-                n: n, e: e, d: d, 
-                p: try Data(bytesOf: p, paddedToSize: p.byteCount), 
+                n: n, e: e, d: d,
+                p: try Data(bytesOf: p, paddedToSize: p.byteCount),
                 q: try Data(bytesOf: q, paddedToSize: q.byteCount),
                 parameters: parameters
             )

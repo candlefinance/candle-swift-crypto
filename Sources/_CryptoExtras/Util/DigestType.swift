@@ -13,8 +13,8 @@
 //===----------------------------------------------------------------------===//
 
 // NOTE: This file is unconditionally compiled because RSABSSA is implemented using BoringSSL on all platforms.
-@_implementationOnly import CCryptoBoringSSL
-import Crypto
+@_implementationOnly import CandleCCryptoBoringSSL
+import CandleCrypto
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 struct DigestType {

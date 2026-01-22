@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Crypto
-@_implementationOnly import CCryptoBoringSSL
-@_implementationOnly import CCryptoBoringSSLShims
-import CryptoBoringWrapper
+import CandleCrypto
+@_implementationOnly import CandleCCryptoBoringSSL
+@_implementationOnly import CandleCCryptoBoringSSLShims
+import CandleCryptoBoringWrapper
 import Foundation
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)

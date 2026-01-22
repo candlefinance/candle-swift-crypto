@@ -11,7 +11,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 //===----------------------------------------------------------------------===//
-import Crypto
+import CandleCrypto
 import Foundation
 
 #if canImport(Darwin) && !CRYPTO_IN_SWIFTPM

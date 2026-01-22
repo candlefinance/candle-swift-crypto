@@ -12,10 +12,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Crypto
-@_implementationOnly import CCryptoBoringSSL
-@_implementationOnly import CCryptoBoringSSLShims
-import CryptoBoringWrapper
+import CandleCrypto
+@_implementationOnly import CandleCCryptoBoringSSL
+@_implementationOnly import CandleCCryptoBoringSSLShims
+import CandleCryptoBoringWrapper
 import Foundation
 
 /// Types associated with the AES GCM SIV algorithm

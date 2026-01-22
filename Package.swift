@@ -46,9 +46,9 @@ if development || isFreeBSD {
         .define("CRYPTO_IN_SWIFTPM_FORCE_BUILD_API"),
     ]
     dependencies = [
-        "CCryptoBoringSSL",
-        "CCryptoBoringSSLShims",
-        "CryptoBoringWrapper",
+        "CandleCCryptoBoringSSL",
+        "CandleCCryptoBoringSSLShims",
+        "CandleCryptoBoringWrapper",
     ]
 } else {
     let platforms: [Platform] = [
@@ -62,9 +62,9 @@ if development || isFreeBSD {
         .define("CRYPTO_IN_SWIFTPM_FORCE_BUILD_API", .when(platforms: platforms)),
     ]
     dependencies = [
-        .target(name: "CCryptoBoringSSL", condition: .when(platforms: platforms)),
-        .target(name: "CCryptoBoringSSLShims", condition: .when(platforms: platforms)),
-        .target(name: "CryptoBoringWrapper", condition: .when(platforms: platforms)),
+        .target(name: "CandleCCryptoBoringSSL", condition: .when(platforms: platforms)),
+        .target(name: "CandleCCryptoBoringSSLShims", condition: .when(platforms: platforms)),
+        .target(name: "CandleCryptoBoringWrapper", condition: .when(platforms: platforms)),
     ]
 }
 
@@ -83,10 +83,10 @@ let privacyManifestResource: [PackageDescription.Resource] = []
 let package = Package(
     name: "swift-crypto",
     products: [
-        .library(name: "Crypto", targets: ["Crypto"]),
+        .library(name: "CandleCrypto", targets: ["CandleCrypto"]),
         .library(name: "_CryptoExtras", targets: ["_CryptoExtras"]),
         /* This target is used only for symbol mangling. It's added and removed automatically because it emits build warnings. MANGLE_START
-            .library(name: "CCryptoBoringSSL", type: .static, targets: ["CCryptoBoringSSL"]),
+            .library(name: "CandleCCryptoBoringSSL", type: .static, targets: ["CandleCCryptoBoringSSL"]),
             MANGLE_END */
     ],
     dependencies: [
@@ -94,7 +94,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "CCryptoBoringSSL",
+            name: "CandleCCryptoBoringSSL",
             exclude: privacyManifestExclude + [
                 "hash.txt",
                 "include/boringssl_prefix_symbols_nasm.inc",
@@ -125,15 +125,15 @@ let package = Package(
             ]
         ),
         .target(
-            name: "CCryptoBoringSSLShims",
-            dependencies: ["CCryptoBoringSSL"],
+            name: "CandleCCryptoBoringSSLShims",
+            dependencies: ["CandleCCryptoBoringSSL"],
             exclude: privacyManifestExclude + [
                 "CMakeLists.txt"
             ],
             resources: privacyManifestResource
         ),
         .target(
-            name: "Crypto",
+            name: "CandleCrypto",
             dependencies: dependencies,
             exclude: privacyManifestExclude + [
                 "CMakeLists.txt",
@@ -148,10 +148,10 @@ let package = Package(
         .target(
             name: "_CryptoExtras",
             dependencies: [
-                "CCryptoBoringSSL",
-                "CCryptoBoringSSLShims",
-                "CryptoBoringWrapper",
-                "Crypto",
+                "CandleCCryptoBoringSSL",
+                "CandleCCryptoBoringSSLShims",
+                "CandleCryptoBoringWrapper",
+                "CandleCrypto",
                 .product(name: "SwiftASN1", package: "swift-asn1"),
             ],
             exclude: privacyManifestExclude + [
@@ -161,20 +161,20 @@ let package = Package(
             swiftSettings: swiftSettings
         ),
         .target(
-            name: "CryptoBoringWrapper",
+            name: "CandleCryptoBoringWrapper",
             dependencies: [
-                "CCryptoBoringSSL",
-                "CCryptoBoringSSLShims",
+                "CandleCCryptoBoringSSL",
+                "CandleCCryptoBoringSSLShims",
             ],
             exclude: privacyManifestExclude + [
                 "CMakeLists.txt"
             ],
             resources: privacyManifestResource
         ),
-        .executableTarget(name: "crypto-shasum", dependencies: ["Crypto"]),
+        .executableTarget(name: "crypto-shasum", dependencies: ["CandleCrypto"]),
         .testTarget(
             name: "CryptoTests",
-            dependencies: ["Crypto"],
+            dependencies: ["CandleCrypto"],
             resources: [
                 .copy("HPKE/hpke-test-vectors.json")
             ],
@@ -192,7 +192,7 @@ let package = Package(
             ],
             swiftSettings: swiftSettings
         ),
-        .testTarget(name: "CryptoBoringWrapperTests", dependencies: ["CryptoBoringWrapper"]),
+        .testTarget(name: "CryptoBoringWrapperTests", dependencies: ["CandleCryptoBoringWrapper"]),
     ],
     cxxLanguageStandard: .cxx14
 )

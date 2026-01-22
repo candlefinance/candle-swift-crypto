@@ -12,8 +12,8 @@
 //
 //===----------------------------------------------------------------------===//
 import Foundation
-import Crypto
-import CryptoBoringWrapper
+import CandleCrypto
+import CandleCryptoBoringWrapper
 import SwiftASN1
 
 #if CRYPTO_IN_SWIFTPM && !CRYPTO_IN_SWIFTPM_FORCE_BUILD_API
@@ -75,7 +75,7 @@ extension _RSA.Signing {
 
             try self.init(derRepresentation: derBytes)
         }
-        
+
         /// Construct an RSA public key from a PEM representation.
         ///
         /// This constructor supports key sizes of 1024 bits or more. Users should validate that key sizes are appropriate
@@ -102,7 +102,7 @@ extension _RSA.Signing {
                 throw CryptoKitError.incorrectParameterSize
             }
         }
-        
+
         /// Construct an RSA public key from a DER representation.
         ///
         /// This constructor supports key sizes of 1024 bits or more. Users should validate that key sizes are appropriate
@@ -178,7 +178,7 @@ extension _RSA.Signing {
                 throw CryptoKitError.incorrectParameterSize
             }
         }
-        
+
         /// Construct an RSA public key from a PEM representation.
         ///
         /// This constructor supports key sizes of 1024 bits or more. Users should validate that key sizes are appropriate
@@ -186,7 +186,7 @@ extension _RSA.Signing {
         /// - Warning: Key sizes less than 2048 are not recommended and should only be used for compatibility reasons.
         public init(unsafePEMRepresentation pemRepresentation: String) throws {
             self.backing = try BackingPrivateKey(pemRepresentation: pemRepresentation)
-            
+
             guard self.keySizeInBits >= 1024 else {
                 throw CryptoKitError.incorrectParameterSize
             }
@@ -203,7 +203,7 @@ extension _RSA.Signing {
                 throw CryptoKitError.incorrectParameterSize
             }
         }
-        
+
         /// Construct an RSA public key from a DER representation.
         ///
         /// This constructor supports key sizes of 1024 bits or more. Users should validate that key sizes are appropriate
@@ -238,7 +238,7 @@ extension _RSA.Signing {
             }
             self.backing = try BackingPrivateKey(keySize: keySize)
         }
-        
+
         /// Randomly generate a new RSA private key of a given size.
         ///
         /// This constructor will refuse to generate keys smaller than 1024 bits. Callers that want to enforce minimum
@@ -276,7 +276,7 @@ extension _RSA.Signing {
         /// The use of this API is strongly discouraged for performance reasons,
         /// as it requires the factorization of the modulus, which is resource-intensive.
         /// It is recommended to use the other initializers to construct a private key,
-        /// unless you have only the modulus, public exponent, and private exponent 
+        /// unless you have only the modulus, public exponent, and private exponent
         /// to construct the key.
         ///
         /// - Parameters:
@@ -285,14 +285,14 @@ extension _RSA.Signing {
         ///   - d: private exponent of the key
         public static func _createFromNumbers(n: some ContiguousBytes, e: some ContiguousBytes, d: some ContiguousBytes) throws -> Self {
             let (p, q) = try _RSA.extractPrimeFactors(
-                n: try ArbitraryPrecisionInteger(bytes: n), 
-                e: try ArbitraryPrecisionInteger(bytes: e), 
+                n: try ArbitraryPrecisionInteger(bytes: n),
+                e: try ArbitraryPrecisionInteger(bytes: e),
                 d: try ArbitraryPrecisionInteger(bytes: d)
             )
 
             return try Self.init(
-                n: n, e: e, d: d, 
-                p: try Data(bytesOf: p, paddedToSize: p.byteCount), 
+                n: n, e: e, d: d,
+                p: try Data(bytesOf: p, paddedToSize: p.byteCount),
                 q: try Data(bytesOf: q, paddedToSize: q.byteCount)
             )
         }
@@ -308,7 +308,7 @@ extension _RSA.Signing {
         public init<D: DataProtocol>(rawRepresentation: D) {
             self.rawRepresentation = Data(rawRepresentation)
         }
-        
+
         internal init(signatureBytes: [UInt8]) {
             self.rawRepresentation = Data(signatureBytes)
         }
@@ -501,7 +501,7 @@ extension _RSA.Encryption {
         }
 
         private var backing: BackingPublicKey
-        
+
         /// Construct an RSA public key from a PEM representation.
         ///
         /// This constructor supports key sizes of 2048 bits or more. Users should validate that key sizes are appropriate
@@ -510,7 +510,7 @@ extension _RSA.Encryption {
             self.backing = try BackingPublicKey(pemRepresentation: pemRepresentation)
             guard self.keySizeInBits >= 2048, self.keySizeInBits % 8 == 0 else { throw CryptoKitError.incorrectParameterSize }
         }
-        
+
         /// Construct an RSA public key from a PEM representation.
         ///
         /// This constructor supports key sizes of 1024 bits or more. Users should validate that key sizes are appropriate
@@ -529,7 +529,7 @@ extension _RSA.Encryption {
             self.backing = try BackingPublicKey(derRepresentation: derRepresentation)
             guard self.keySizeInBits >= 2048, self.keySizeInBits % 8 == 0 else { throw CryptoKitError.incorrectParameterSize }
         }
-        
+
         /// Construct an RSA public key from a DER representation.
         ///
         /// This constructor supports key sizes of 1024 bits or more. Users should validate that key sizes are appropriate
@@ -563,7 +563,7 @@ extension _RSA.Encryption {
             return Primitives(modulus: n, publicExponent: e)
         }
     }
-    
+
     /// Identical to ``_RSA/Signing/PrivateKey``.
     @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
     public struct PrivateKey {
@@ -577,7 +577,7 @@ extension _RSA.Encryption {
             self.backing = try BackingPrivateKey(pemRepresentation: pemRepresentation)
             guard self.keySizeInBits >= 2048, self.keySizeInBits % 8 == 0 else { throw CryptoKitError.incorrectParameterSize }
         }
-        
+
         /// Construct an RSA public key from a PEM representation.
         ///
         /// This constructor supports key sizes of 1024 bits or more. Users should validate that key sizes are appropriate
@@ -596,7 +596,7 @@ extension _RSA.Encryption {
             self.backing = try BackingPrivateKey(derRepresentation: derRepresentation)
             guard self.keySizeInBits >= 2048, self.keySizeInBits % 8 == 0 else { throw CryptoKitError.incorrectParameterSize }
         }
-        
+
         /// Construct an RSA public key from a DER representation.
         ///
         /// This constructor supports key sizes of 1024 bits or more. Users should validate that key sizes are appropriate
@@ -627,7 +627,7 @@ extension _RSA.Encryption {
             guard keySize.bitCount >= 2048 else { throw CryptoKitError.incorrectParameterSize }
             self.backing = try BackingPrivateKey(keySize: keySize)
         }
-        
+
         /// Randomly generate a new RSA private key of a given size.
         ///
         /// This constructor will refuse to generate keys smaller than 1024 bits. Callers that want to enforce minimum
@@ -637,7 +637,7 @@ extension _RSA.Encryption {
             guard keySize.bitCount >= 1024 else { throw CryptoKitError.incorrectParameterSize }
             self.backing = try BackingPrivateKey(keySize: keySize)
         }
-        
+
         public var derRepresentation: Data { self.backing.derRepresentation }
         public var pemRepresentation: String { self.backing.pemRepresentation }
         public var pkcs8PEMRepresentation: String { self.backing.pkcs8PEMRepresentation }
@@ -649,7 +649,7 @@ extension _RSA.Encryption {
         /// The use of this API is strongly discouraged for performance reasons,
         /// as it requires the factorization of the modulus, which is resource-intensive.
         /// It is recommended to use the other initializers to construct a private key,
-        /// unless you have only the modulus, public exponent, and private exponent 
+        /// unless you have only the modulus, public exponent, and private exponent
         /// to construct the key.
         ///
         /// - Parameters:
@@ -658,14 +658,14 @@ extension _RSA.Encryption {
         ///   - d: private exponent of the key
         public static func _createFromNumbers(n: some ContiguousBytes, e: some ContiguousBytes, d: some ContiguousBytes) throws -> Self {
             let (p, q) = try _RSA.extractPrimeFactors(
-                n: try ArbitraryPrecisionInteger(bytes: n), 
-                e: try ArbitraryPrecisionInteger(bytes: e), 
+                n: try ArbitraryPrecisionInteger(bytes: n),
+                e: try ArbitraryPrecisionInteger(bytes: e),
                 d: try ArbitraryPrecisionInteger(bytes: d)
             )
 
             return try Self.init(
-                n: n, e: e, d: d, 
-                p: try Data(bytesOf: p, paddedToSize: p.byteCount), 
+                n: n, e: e, d: d,
+                p: try Data(bytesOf: p, paddedToSize: p.byteCount),
                 q: try Data(bytesOf: q, paddedToSize: q.byteCount)
             )
         }
@@ -685,7 +685,7 @@ extension _RSA.Encryption {
         private init(_ backing: Backing) {
             self.backing = backing
         }
-        
+
         /// PKCS#1 OAEP padding
         ///
         /// As defined by [RFC 8017 § 7.1](https://datatracker.ietf.org/doc/html/rfc8017#section-7.1).
@@ -729,7 +729,7 @@ extension _RSA.Encryption.PublicKey {
             return (self.keySizeInBits / 8) - 42
         }
     }
-    
+
     /// Encrypt a message with this key, using the specified padding mode.
     ///
     /// > Important: The size of the data to encrypt _must_ not exceed the modulus of the key (e.g.
@@ -755,8 +755,8 @@ extension _RSA {
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)
 extension _RSA {
     static func extractPrimeFactors(
-        n: ArbitraryPrecisionInteger, 
-        e: ArbitraryPrecisionInteger, 
+        n: ArbitraryPrecisionInteger,
+        e: ArbitraryPrecisionInteger,
         d: ArbitraryPrecisionInteger
     ) throws -> (p: ArbitraryPrecisionInteger, q: ArbitraryPrecisionInteger) {
         // This is based on the proof of fact 1 in https://www.ams.org/notices/199902/boneh.pdf

@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 import Foundation
-import Crypto
+import CandleCrypto
 
 /// (Verifiable Partly-)Oblivious Pseudorandom Functions
 /// https://cfrg.github.io/draft-irtf-cfrg-voprf/draft-irtf-cfrg-voprf.html
@@ -45,7 +45,7 @@ extension OPRF {
             return "OPRFV1-"
         }
     }
-    
+
     /// OPRF Modes
     enum Mode: Int, CaseIterable {
         // Base mode corresponds to an OPRF
@@ -55,11 +55,11 @@ extension OPRF {
         // Partially-Oblivious verifiable OPRF
         case partiallyOblivious = 2
     }
-    
+
     /// IETF Ciphersuites defined for OPRFs
     struct Ciphersuite<H2G: HashToGroup> {
         let suiteID: Int
-        
+
         init(_ h2g: H2G.Type) {
             switch h2g.self {
             case is HashToCurveImpl<P256>.Type:
@@ -72,7 +72,7 @@ extension OPRF {
                 fatalError("Unsupported H2G ciphersuite.")
             }
         }
-        
+
         var stringIdentifier: String {
             get {
                 switch suiteID {
@@ -88,7 +88,7 @@ extension OPRF {
             }
         }
     }
-    
+
     internal static func suiteIdentifier<H2G: HashToGroup>(suite: Ciphersuite<H2G>, v8CompatibilityMode: Bool) -> Data {
         if v8CompatibilityMode {
             return I2OSP(value: suite.suiteID, outputByteCount: 2)
@@ -96,13 +96,13 @@ extension OPRF {
             return Data("-\(suite.stringIdentifier)".utf8)
         }
     }
-    
+
     internal static func setupContext<H2G: HashToGroup>(mode: Mode, suite: Ciphersuite<H2G>, v8CompatibilityMode: Bool) -> Data {
         return oprfVersion(v8CompatibilityMode: v8CompatibilityMode).data(using: .utf8)!
         + I2OSP(value: mode.rawValue, outputByteCount: 1)
         + suiteIdentifier(suite: suite, v8CompatibilityMode: v8CompatibilityMode)
     }
-    
+
     internal static func composeFinalizeContext<H2G: HashToGroup>(message: Data,
                                                                   info: Data?,
                                                                   unblindedElement: H2G.G.Element,
@@ -115,15 +115,15 @@ extension OPRF {
             + I2OSP(value: info?.count ?? 0, outputByteCount: 2) + (info ?? Data())
             + I2OSP(value: unblindedElement.oprfRepresentation.count, outputByteCount: 2) + unblindedElement.oprfRepresentation
             + I2OSP(value: finalizeCTX.count, outputByteCount: 2) + finalizeCTX
-            
+
             return hashInput
         } else {
             var hashInput = I2OSP(value: message.count, outputByteCount: 2) + message
-            
+
             if mode == .partiallyOblivious {
                 hashInput = hashInput + I2OSP(value: info!.count, outputByteCount: 2) + info!
             }
-            
+
             hashInput = hashInput + I2OSP(value: unblindedElement.oprfRepresentation.count, outputByteCount: 2) + unblindedElement.oprfRepresentation + Data("Finalize".utf8)
             return hashInput
         }

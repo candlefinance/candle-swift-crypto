@@ -13,10 +13,10 @@
 //===----------------------------------------------------------------------===//
 
 // NOTE: This file is unconditionally compiled because RSABSSA is implemented using BoringSSL on all platforms.
-@_implementationOnly import CCryptoBoringSSL
-@_implementationOnly import CCryptoBoringSSLShims
-import Crypto
-import CryptoBoringWrapper
+@_implementationOnly import CandleCCryptoBoringSSL
+@_implementationOnly import CandleCCryptoBoringSSLShims
+import CandleCrypto
+import CandleCryptoBoringWrapper
 import Foundation
 
 @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, macCatalyst 13, visionOS 1.0, *)

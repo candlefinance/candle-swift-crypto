@@ -11,7 +11,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 //===----------------------------------------------------------------------===//
-import Crypto
+import CandleCrypto
 #if canImport(Darwin) || swift(>=5.9.1)
 import Foundation
 #else
@@ -48,7 +48,7 @@ extension KDF.Insecure {
             }
             return try PBKDF2.deriveKey(from: password, salt: salt, using: hashFunction, outputByteCount: outputByteCount, unsafeUncheckedRounds: rounds)
         }
-        
+
         /// Derives a symmetric key using the PBKDF2 algorithm.
         ///
         /// - Parameters:
@@ -62,17 +62,17 @@ extension KDF.Insecure {
         public static func deriveKey<Passphrase: DataProtocol, Salt: DataProtocol>(from password: Passphrase, salt: Salt, using hashFunction: HashFunction, outputByteCount: Int, unsafeUncheckedRounds: Int) throws -> SymmetricKey {
             return try BackingPBKDF2.deriveKey(from: password, salt: salt, using: hashFunction, outputByteCount: outputByteCount, rounds: unsafeUncheckedRounds)
         }
-        
+
         public struct HashFunction: Equatable, Hashable, Sendable {
             let rawValue: String
-            
+
             public static let insecureMD5 = HashFunction(rawValue: "insecure_md5")
             public static let insecureSHA1 = HashFunction(rawValue: "insecure_sha1")
             public static let insecureSHA224 = HashFunction(rawValue: "insecure_sha224")
             public static let sha256 = HashFunction(rawValue: "sha256")
             public static let sha384 = HashFunction(rawValue: "sha384")
             public static let sha512 = HashFunction(rawValue: "sha512")
-            
+
             init(rawValue: String) {
                 self.rawValue = rawValue
             }

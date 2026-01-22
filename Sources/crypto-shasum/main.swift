@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 import Foundation
-import Crypto
+import CandleCrypto
 
 let help = """
 Usage: crypto-shasum [OPTION]... [FILE]...

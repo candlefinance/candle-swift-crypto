@@ -12,9 +12,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_implementationOnly import CCryptoBoringSSL
-@_implementationOnly import CCryptoBoringSSLShims
-import Crypto
+@_implementationOnly import CandleCCryptoBoringSSL
+@_implementationOnly import CandleCCryptoBoringSSLShims
+import CandleCrypto
 
 #if canImport(Darwin) || swift(>=5.9.1)
 import Foundation

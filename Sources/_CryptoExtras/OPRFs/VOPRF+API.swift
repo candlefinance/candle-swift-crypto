@@ -11,7 +11,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 //===----------------------------------------------------------------------===//
-import Crypto
+import CandleCrypto
 import Foundation
 
 // MARK: - P384 + VPORF (P384-SHA384)
@@ -334,7 +334,7 @@ extension P384._VOPRF {
             guard rawRepresentation.count == Self.serializedByteCount else {
                 throw CryptoKitError.incorrectParameterSize
             }
-            
+
             var remainingBytes = rawRepresentation[...]
 
             let evaluatedElementBytes = remainingBytes.prefix(EvaluatedElement.serializedByteCount)
@@ -383,7 +383,7 @@ extension P384._VOPRF.PublicKey {
     }
 
     /// Compute the output of the VOPRF by verifying the server proof, and unblinding and hashing the evaluated element.
-    /// 
+    ///
     /// - Parameter blindedInput: The blinded input from the blind operation, computed earlier by the client.
     /// - Parameter blindEvaluation: The blind evaluation from the evaluate operation, received from the server.
     /// - Returns: The PRF output.
