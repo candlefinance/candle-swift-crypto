@@ -1,4 +1,4 @@
-module CCryptoBoringSSL {
+module CandleCCryptoBoringSSL {
     header "CCryptoBoringSSL.h"
     export *
 }

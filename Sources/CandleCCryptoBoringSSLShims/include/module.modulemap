@@ -1,4 +1,4 @@
-module CCryptoBoringSSLShims {
+module CandleCCryptoBoringSSLShims {
     header "CCryptoBoringSSLShims.h"
     export *
 }
