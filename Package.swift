@@ -172,11 +172,11 @@ let package = Package(
 // Switch between local and remote dependencies depending on an environment variable
 if ProcessInfo.processInfo.environment["SWIFTCI_USE_LOCAL_DEPS"] == nil {
     package.dependencies += [
-        .package(name: "candle-swift-asn1", url: "https://github.com/candlefinance/candle-swift-asn1.git", branch: "fix-candle-1.3.2")
+        .package(url: "https://github.com/candlefinance/candle-swift-asn1.git", branch: "fix-candle-1.3.2")
     ]
 } else {
     package.dependencies += [
-        .package(name: "candle-swift-asn1", path: "../swift-asn1")
+        .package(path: "../swift-asn1")
     ]
 }
 
