@@ -81,7 +81,7 @@ let privacyManifestResource: [PackageDescription.Resource] = []
 #endif
 
 let package = Package(
-    name: "candle-swift-crypto",
+    name: "swift-crypto",
     products: [
         .library(name: "CandleCrypto", targets: ["CandleCrypto"]),
         /* This target is used only for symbol mangling. It's added and removed automatically because it emits build warnings. MANGLE_START
